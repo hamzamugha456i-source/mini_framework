@@ -73,10 +73,22 @@ def register_controller(url_base, controller_cls):
         id = req.environ.get('router.params', {}).get('id')
         ctrl = controller_cls(req)
         return ctrl.retrieve(id)(environ, start_response)
+    
+    def create_comment_for_post(environ, start_response):
+        req = Request(environ)
+        # Extract post_id from URL
+        post_id = req.environ.get('router.params', {}).get('post_id')
+        
+        # Inject post_id into body so the controller logic works
+        req.body['post_id'] = int(post_id)
+        
+        ctrl = CommentController(req)
+        return ctrl.create()(environ, start_response)
 
     router.add_route(f'/{url_base}', list_items, methods=['GET'])
     router.add_route(f'/{url_base}', create_item, methods=['POST'])
     router.add_route(f'/{url_base}/<id>', get_item, methods=['GET'])
+    router.add_route('/posts/<post_id>/comments', create_comment_for_post, methods=['POST'])
 
 # Register routes for Users, Posts, Comments
 register_controller('users', UserController)
