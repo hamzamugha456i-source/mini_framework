@@ -24,12 +24,14 @@ class CharField(Field):
              raise ValidationError(f"{self.name} must be a string")
         if value is not None and len(value) > self.max_length:
             raise ValidationError(f"{self.name} cannot exceed {self.max_length} chars")
+        return value
 
 class IntegerField(Field):
     def validate(self, value):
         super().validate(value)
         if value is not None and not isinstance(value, int):
             raise ValidationError(f"{self.name} must be an integer")
+        return value
 
 class DateTimeField(Field):
     def __init__(self, auto_now=False, **kwargs):
@@ -39,3 +41,4 @@ class DateTimeField(Field):
     def validate(self, value):
         if value is not None and not isinstance(value, datetime):
              raise ValidationError(f"{self.name} must be a datetime object")
+        return value

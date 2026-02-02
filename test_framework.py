@@ -1,5 +1,6 @@
 import unittest
 from core.router import Router
+from core.response import Response
 from models.base import Model
 from models.fields import CharField
 
@@ -31,8 +32,8 @@ class TestFramework(unittest.TestCase):
 
     def test_model_save_and_retrieve(self):
         # Clear storage for test
-        TestUser._storage = {} 
-        TestUser._id_counter = {}
+        Model._storage = {} 
+        Model._id_counter = {}
         
         user = TestUser.create(name="Bob")
         self.assertIsNotNone(user.id)
@@ -92,7 +93,8 @@ class TestFramework(unittest.TestCase):
     # 6. Test Model Queries (New)
     def test_model_filter(self):
         # Setup
-        TestUser._storage = {}
+        Model._storage = {}
+        Model._id_counter = {}
         TestUser.create(name="Alice")
         TestUser.create(name="Bob")
         TestUser.create(name="Alice") # Duplicate name
@@ -102,7 +104,7 @@ class TestFramework(unittest.TestCase):
         self.assertEqual(len(results), 2)
         
     def test_model_all(self):
-        TestUser._storage = {}
+        Model._storage = {}
         TestUser.create(name="A")
         TestUser.create(name="B")
         self.assertEqual(len(TestUser.all()), 2)
