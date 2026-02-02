@@ -83,3 +83,18 @@ class Model:
         obj = cls(**kwargs)
         obj.save()
         return obj
+    
+    @classmethod
+    def filter(cls, **kwargs):
+        # Requirements: Query methods (filter()) 
+        objects = cls.all()
+        results = []
+        for obj in objects:
+            match = True
+            for key, value in kwargs.items():
+                if getattr(obj, key, None) != value:
+                    match = False
+                    break
+            if match:
+                results.append(obj)
+        return results
